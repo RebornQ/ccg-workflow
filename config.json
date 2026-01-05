@@ -10,12 +10,6 @@
       "description": "核心工作流 - 多模型协作 (Codex + Gemini)",
       "operations": [
         {
-          "type": "copy_file",
-          "source": "memorys/CLAUDE.md",
-          "target": "CLAUDE.md",
-          "description": "安装核心工作流指令"
-        },
-        {
           "type": "merge_dir",
           "source": "commands",
           "target": "commands",

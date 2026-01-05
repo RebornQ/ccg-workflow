@@ -50,7 +50,10 @@ strategy = "parallel"
 ### 阶段 0: 读取配置 + Prompt 增强
 1. **读取 `~/.ccg/config.toml`** 获取模型路由配置
 2. 如果配置不存在，使用默认值：frontend=gemini, backend=codex
-3. 调用 `mcp__ace-tool__enhance_prompt` 优化原始需求
+3. 调用 `mcp__ace-tool__enhance_prompt` 优化原始需求:
+   - `prompt`: 用户的原始需求 ($ARGUMENTS)
+   - `conversation_history`: 最近的对话历史(5-10轮对话)
+   - `project_root_path`: 当前项目根目录绝对路径
 4. 向用户展示原始和增强后的 prompt:
 
 ```
@@ -74,7 +77,9 @@ strategy = "parallel"
    - 如果 N: 使用原始 prompt 或要求修改
 
 ### 阶段 1: 上下文检索
-1. 调用 `mcp__ace-tool__search_context` 获取（增强后的）需求相关代码
+1. 调用 `mcp__ace-tool__search_context` 获取（增强后的）需求相关代码:
+   - `project_root_path`: 项目根目录绝对路径
+   - `query`: 增强后的需求描述
 2. 识别所有相关文件、类、函数和依赖
 3. 如需求仍不清晰，提出澄清问题
 

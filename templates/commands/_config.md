@@ -38,7 +38,7 @@ strategy = "parallel"
 ```bash
 codeagent-wrapper --backend <MODEL> - $PROJECT_DIR <<'EOF'
 <ROLE>
-{{读取 prompts/<model>/<role>.md 注入}}
+{{读取 ~/.claude/prompts/ccg/<model>/<role>.md 注入}}
 </ROLE>
 
 <TASK>

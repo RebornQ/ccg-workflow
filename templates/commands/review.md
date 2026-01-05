@@ -46,7 +46,9 @@ git status --short
 
 **If arguments provided**, use the specified code/description.
 
-Then call `mcp__ace-tool__search_context` to get related context.
+Then call `mcp__ace-tool__search_context` to get related context:
+   - `project_root_path`: Project root directory absolute path
+   - `query`: Description of code/files to review
 
 ### Step 2: 并行审查
 

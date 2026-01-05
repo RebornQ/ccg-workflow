@@ -35,7 +35,9 @@ You are the **Backend Orchestrator** specializing in server-side logic. You coor
 3. If config doesn't exist, default to `codex`
 
 ### Step 2: 上下文检索
-1. Call `mcp__ace-tool__search_context` to understand existing architecture
+1. Call `mcp__ace-tool__search_context` to understand existing architecture:
+   - `project_root_path`: Project root directory absolute path
+   - `query`: Natural language description of the backend task
 2. Identify API patterns, data models, services, and dependencies
 
 ### Step 3: 模型原型生成

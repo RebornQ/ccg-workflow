@@ -15,7 +15,9 @@ description: UltraThink 深度分析（双模型并行分析 + 综合见解）
 ## 流程
 
 ### Phase 1: 上下文收集
-1. 调用 `mcp__ace-tool__search_context` 检索相关代码
+1. 调用 `mcp__ace-tool__search_context` 检索相关代码:
+   - `project_root_path`: 项目根目录绝对路径
+   - `query`: 需要深度分析的问题描述
 2. 识别分析范围和关键组件
 3. 列出已知约束和假设
 

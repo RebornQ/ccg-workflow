@@ -37,7 +37,9 @@ You are the **Analysis Coordinator** orchestrating multi-model research. You dir
 1. **读取 `~/.ccg/config.toml`** 获取模型配置
 2. 合并 `routing.frontend.models` 和 `routing.backend.models` 获取分析模型列表
 3. 如果配置不存在，默认使用 `["codex", "gemini"]`
-4. Call `mcp__ace-tool__search_context` to understand relevant code
+4. Call `mcp__ace-tool__search_context` to understand relevant code:
+   - `project_root_path`: Project root directory absolute path
+   - `query`: Natural language description of what to analyze
 5. Identify key files, patterns, and architecture
 
 ### Step 2: 并行分析

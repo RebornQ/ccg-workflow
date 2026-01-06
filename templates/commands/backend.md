@@ -13,7 +13,7 @@ description: 后端/逻辑/算法任务，自动路由到配置的后端模型�
 - Default authority for algorithms, APIs, and business logic.
 
 ## 配置
-**首先读取 `~/.ccg/config.toml` 获取模型路由配置**:
+**首先读取 `~/.claude/.ccg/config.toml` 获取模型路由配置**:
 ```toml
 [routing.backend]
 models = ["codex", "gemini"]  # 用户配置的后端模型列表
@@ -30,7 +30,7 @@ You are the **Backend Orchestrator** specializing in server-side logic. You coor
 ## 流程
 
 ### Step 1: 读取配置
-1. Read `~/.ccg/config.toml` to get backend model configuration
+1. Read `~/.claude/.ccg/config.toml` to get backend model configuration
 2. Identify which models to use based on `routing.backend.models`
 3. If config doesn't exist, default to `codex`
 
@@ -52,7 +52,7 @@ You are the **Backend Orchestrator** specializing in server-side logic. You coor
 ```bash
 # Codex 后端原型示例
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
 
 <TASK>
 实现后端功能: {{后端任务描述}}
@@ -66,7 +66,7 @@ EOF
 ```bash
 # Gemini 后端原型示例（如配置中包含）
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/analyzer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/analyzer.md
 
 <TASK>
 实现后端功能: {{后端任务描述}}
@@ -107,6 +107,6 @@ Call configured backend model(s) to review the final implementation:
 ## 注意事项
 - Codex excels at complex logic and debugging
 - Codex uses read-only sandbox by default
-- Read `~/.ccg/config.toml` at start of execution
+- Read `~/.claude/.ccg/config.toml` at start of execution
 - Always request Unified Diff Patch format
 - Use HEREDOC syntax (`<<'EOF'`) to avoid shell escaping issues

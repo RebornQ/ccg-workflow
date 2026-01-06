@@ -31,7 +31,7 @@ description: UltraThink 多模型调试（Codex 后端诊断 + Gemini 前端诊�
 ```bash
 # Codex 后端诊断
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/debugger.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/debugger.md
 
 <TASK>
 诊断问题: {{问题描述}}
@@ -45,7 +45,7 @@ EOF
 ```bash
 # Gemini 前端诊断
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/debugger.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/debugger.md
 
 <TASK>
 诊断问题: {{问题描述}}

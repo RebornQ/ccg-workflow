@@ -3,7 +3,7 @@ description: CCG 多模型协作系统 - 共享配置和调用规范
 ---
 
 ## 配置文件
-路径: `~/.ccg/config.toml`
+路径: `~/.claude/.ccg/config.toml`
 
 ```toml
 [routing]
@@ -39,7 +39,7 @@ strategy = "parallel"
 ### 基础模式
 ```bash
 codeagent-wrapper --backend <MODEL> - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/<model>/<role>.md
+ROLE_FILE: ~/.claude/.ccg/prompts/<model>/<role>.md
 
 <TASK>
 {{任务描述}}

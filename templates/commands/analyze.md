@@ -13,7 +13,7 @@ description: 多模型技术分析（根据配置并行），交叉验证后综�
 - Configured models provide perspectives for cross-validation.
 
 ## 配置
-**首先读取 `~/.ccg/config.toml` 获取模型配置**:
+**首先读取 `~/.claude/.ccg/config.toml` 获取模型配置**:
 ```toml
 [routing.frontend]
 models = ["gemini", "codex"]
@@ -34,7 +34,7 @@ You are the **Analysis Coordinator** orchestrating multi-model research. You dir
 
 ### Step 1: 读取配置 + 上下文检索
 
-1. **读取 `~/.ccg/config.toml`** 获取模型配置
+1. **读取 `~/.claude/.ccg/config.toml`** 获取模型配置
 2. 合并 `routing.frontend.models` 和 `routing.backend.models` 获取分析模型列表
 3. 如果配置不存在，默认使用 `["codex", "gemini"]`
 4. Call `mcp__ace-tool__search_context` to understand relevant code:
@@ -51,7 +51,7 @@ You are the **Analysis Coordinator** orchestrating multi-model research. You dir
 ```bash
 # Codex 技术分析
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/analyzer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/analyzer.md
 
 <TASK>
 分析任务: {{分析问题或任务}}
@@ -65,7 +65,7 @@ EOF
 ```bash
 # Gemini 技术分析
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/analyzer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/analyzer.md
 
 <TASK>
 分析任务: {{分析问题或任务}}
@@ -96,7 +96,7 @@ Present unified analysis combining all perspectives.
 5. **Recommendations** – actionable next steps
 
 ## 注意事项
-- **首先读取 `~/.ccg/config.toml` 获取模型配置**
+- **首先读取 `~/.claude/.ccg/config.toml` 获取模型配置**
 - This command is for analysis only, no code changes
 - **Use `run_in_background: true` for parallel execution** to avoid blocking
 - 多模型结果交叉验证，取长补短

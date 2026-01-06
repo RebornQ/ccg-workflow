@@ -29,7 +29,7 @@ description: 质量门控修复（双模型交叉验证，90%+ 通过）
 ```bash
 # Codex 后端诊断修复
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
 
 <TASK>
 Bug 修复: {{Bug 描述}}
@@ -43,7 +43,7 @@ EOF
 ```bash
 # Gemini 前端诊断修复
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/frontend.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/frontend.md
 
 <TASK>
 Bug 修复: {{Bug 描述}}
@@ -73,7 +73,7 @@ EOF
 ```bash
 # Codex 审查修复
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/reviewer.md
 
 <TASK>
 审查修复: {{实施的修复代码}}
@@ -87,7 +87,7 @@ EOF
 ```bash
 # Gemini 审查修复
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/reviewer.md
 
 <TASK>
 审查修复: {{实施的修复代码}}

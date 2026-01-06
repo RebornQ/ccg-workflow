@@ -13,7 +13,7 @@ description: 前端/UI/样式任务，自动路由到配置的前端模型进行
 - Default authority for CSS, React, Vue, and visual design.
 
 ## 配置
-**首先读取 `~/.ccg/config.toml` 获取模型路由配置**:
+**首先读取 `~/.claude/.ccg/config.toml` 获取模型路由配置**:
 ```toml
 [routing.frontend]
 models = ["gemini", "codex"]  # 用户配置的前端模型列表
@@ -30,7 +30,7 @@ You are the **Frontend Orchestrator** specializing in UI/UX implementation. You 
 ## 流程
 
 ### Step 1: 读取配置
-1. Read `~/.ccg/config.toml` to get frontend model configuration
+1. Read `~/.claude/.ccg/config.toml` to get frontend model configuration
 2. Identify which models to use based on `routing.frontend.models`
 3. If config doesn't exist, default to `gemini`
 
@@ -52,7 +52,7 @@ You are the **Frontend Orchestrator** specializing in UI/UX implementation. You 
 ```bash
 # Gemini 前端原型示例
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/frontend.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/frontend.md
 
 <TASK>
 实现 UI 功能: {{前端任务描述}}
@@ -66,7 +66,7 @@ EOF
 ```bash
 # Codex 前端原型示例（如配置中包含）
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
 
 <TASK>
 实现 UI 功能: {{前端任务描述}}
@@ -106,6 +106,6 @@ Call configured frontend model(s) to review the final implementation:
 
 ## 注意事项
 - Gemini context limit: < 32k tokens
-- Read `~/.ccg/config.toml` at start of execution
+- Read `~/.claude/.ccg/config.toml` at start of execution
 - Always request Unified Diff Patch format
 - Use HEREDOC syntax (`<<'EOF'`) to avoid shell escaping issues

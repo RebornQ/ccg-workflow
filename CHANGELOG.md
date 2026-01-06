@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.1] - 2026-01-06
+
+### 🐛 Bug Fixes
+
+**修复命令模板中的路径引用**：v1.4.0 迁移了目录结构，但命令模板中的路径引用未同步更新。
+
+#### 修复内容
+
+1. **提示词路径**：
+   ```bash
+   旧引用：ROLE_FILE: ~/.claude/prompts/ccg/<model>/<role>.md
+   新引用：ROLE_FILE: ~/.claude/.ccg/prompts/<model>/<role>.md
+   ```
+
+2. **配置文件路径**：
+   ```bash
+   旧引用：~/.ccg/config.toml
+   新引用：~/.claude/.ccg/config.toml
+   ```
+
+#### 影响范围
+
+已修复 13 个文件中的路径引用：
+- `templates/commands/*.md` (12 个命令)
+- `templates/config/shared-config.md` (共享配置)
+
+#### 升级说明
+
+如果你已经安装了 v1.4.0，请重新运行安装命令更新模板：
+```bash
+npx ccg-workflow@latest init
+```
+
+---
+
 ## [1.4.0] - 2026-01-06 ⚡ BREAKING CHANGES
 
 ### 🏗️ 目录结构重构

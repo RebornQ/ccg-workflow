@@ -35,7 +35,7 @@ description: 多模型测试生成（Codex 后端测试 + Gemini 前端测试）
 ```bash
 # Codex 后端测试生成
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/tester.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/tester.md
 
 <TASK>
 生成测试: {{需要测试的代码}}
@@ -49,7 +49,7 @@ EOF
 ```bash
 # Gemini 前端测试生成
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/tester.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/tester.md
 
 <TASK>
 生成测试: {{需要测试的代码}}

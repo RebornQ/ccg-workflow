@@ -31,7 +31,7 @@ description: 多模型性能优化（Codex 后端优化 + Gemini 前端优化）
 ```bash
 # Codex 后端性能分析
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/optimizer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/optimizer.md
 
 <TASK>
 性能优化: {{优化目标}}
@@ -45,7 +45,7 @@ EOF
 ```bash
 # Gemini 前端性能分析
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/optimizer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/optimizer.md
 
 <TASK>
 性能优化: {{优化目标}}

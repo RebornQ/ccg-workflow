@@ -10,10 +10,10 @@ description: 完整6阶段多模型协作工作流（Prompt增强 → 上下文�
 ## 上下文
 - 要实现的功能: $ARGUMENTS
 - 此命令触发完整的 6 阶段多模型协作工作流
-- 根据 `~/.ccg/config.toml` 配置路由模型
+- 根据 `~/.claude/.ccg/config.toml` 配置路由模型
 
 ## 配置
-**首先读取 `~/.ccg/config.toml` 获取模型路由配置**:
+**首先读取 `~/.claude/.ccg/config.toml` 获取模型路由配置**:
 ```toml
 [routing]
 mode = "smart"  # smart | parallel | sequential
@@ -48,7 +48,7 @@ strategy = "parallel"
 ## 流程
 
 ### 阶段 0: 读取配置 + Prompt 增强
-1. **读取 `~/.ccg/config.toml`** 获取模型路由配置
+1. **读取 `~/.claude/.ccg/config.toml`** 获取模型路由配置
 2. 如果配置不存在，使用默认值：frontend=gemini, backend=codex
 3. 调用 `mcp__ace-tool__enhance_prompt` 优化原始需求:
    - `prompt`: 用户的原始需求 ($ARGUMENTS)
@@ -92,7 +92,7 @@ strategy = "parallel"
 ```bash
 # 后端模型分析示例
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/analyzer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/analyzer.md
 
 <TASK>
 分析需求: {{增强后的需求}}
@@ -120,7 +120,7 @@ EOF
 ```bash
 # Codex 后端原型示例
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
 
 <TASK>
 生成原型: {{功能需求}}
@@ -165,7 +165,7 @@ EOF
 ```bash
 # Codex 代码审查示例
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/reviewer.md
 
 <TASK>
 审查代码: {{实施的代码变更}}
@@ -195,7 +195,7 @@ EOF
 
 ## 关键规则
 - 未经用户批准不得跳过任何阶段
-- **首先读取 `~/.ccg/config.toml` 获取模型配置**
+- **首先读取 `~/.claude/.ccg/config.toml` 获取模型配置**
 - **阶段 0 的 prompt 增强是强制性的** – 必须先展示增强后的 prompt
 - 始终要求外部模型输出 Unified Diff Patch
 - 外部模型对文件系统**零写入权限**

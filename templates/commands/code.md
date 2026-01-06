@@ -36,7 +36,7 @@ description: 三模型代码生成（Codex + Gemini + Claude 并行原型，集�
 ```bash
 # Codex 后端架构原型
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
 
 <TASK>
 生成原型: {{功能需求}}
@@ -50,7 +50,7 @@ EOF
 ```bash
 # Gemini 前端 UI 原型
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/frontend.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/frontend.md
 
 <TASK>
 生成原型: {{功能需求}}
@@ -64,7 +64,7 @@ EOF
 ```bash
 # Claude 全栈整合原型
 codeagent-wrapper --backend claude - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/claude/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/claude/architect.md
 
 <TASK>
 生成原型: {{功能需求}}
@@ -123,7 +123,7 @@ API Contract:
 ```bash
 # Codex 安全性审查
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/reviewer.md
 
 <TASK>
 审查代码: {{实施的代码变更}}
@@ -137,7 +137,7 @@ EOF
 ```bash
 # Gemini 设计审查
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/reviewer.md
 
 <TASK>
 审查代码: {{实施的代码变更}}
@@ -151,7 +151,7 @@ EOF
 ```bash
 # Claude 集成审查
 codeagent-wrapper --backend claude - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/claude/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/claude/reviewer.md
 
 <TASK>
 审查代码: {{实施的代码变更}}

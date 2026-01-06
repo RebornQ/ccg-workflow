@@ -13,7 +13,7 @@ description: 多模型代码审查（根据配置并行），无参数时自动�
 - Configured models review simultaneously for comprehensive feedback.
 
 ## 配置
-**首先读取 `~/.ccg/config.toml` 获取审查模型配置**:
+**首先读取 `~/.claude/.ccg/config.toml` 获取审查模型配置**:
 ```toml
 [routing.review]
 models = ["codex", "gemini"]  # 用户配置的审查模型列表
@@ -34,7 +34,7 @@ You are the **Code Review Coordinator** orchestrating multi-model review. You di
 
 ### Step 1: 读取配置 + 获取待审查代码
 
-1. **读取 `~/.ccg/config.toml`** 获取 `routing.review.models`
+1. **读取 `~/.claude/.ccg/config.toml`** 获取 `routing.review.models`
 2. 如果配置不存在，默认使用 `["codex", "gemini"]`
 
 **If no arguments provided**, run git commands to get current changes:
@@ -59,7 +59,7 @@ Then call `mcp__ace-tool__search_context` to get related context:
 ```bash
 # Codex 代码审查示例
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/reviewer.md
 
 <TASK>
 审查代码: {{待审查的代码变更}}
@@ -73,7 +73,7 @@ EOF
 ```bash
 # Gemini 代码审查示例
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/reviewer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/reviewer.md
 
 <TASK>
 审查代码: {{待审查的代码变更}}
@@ -107,7 +107,7 @@ Provide unified review report to user with recommendations.
 7. **Recommended Actions** – prioritized fix list
 
 ## 注意事项
-- **首先读取 `~/.ccg/config.toml` 获取审查模型配置**
+- **首先读取 `~/.claude/.ccg/config.toml` 获取审查模型配置**
 - **No arguments** = auto-review git changes (`git diff HEAD`)
 - **With arguments** = review specified content
 - **Use `run_in_background: true` for parallel execution** to avoid blocking

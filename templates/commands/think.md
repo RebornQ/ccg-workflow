@@ -29,7 +29,7 @@ description: UltraThink 深度分析（双模型并行分析 + 综合见解）
 ```bash
 # Codex 后端/系统视角分析
 codeagent-wrapper --backend codex - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/analyzer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/analyzer.md
 
 <TASK>
 深度分析: {{问题或场景}}
@@ -43,7 +43,7 @@ EOF
 ```bash
 # Gemini 前端/用户视角分析
 codeagent-wrapper --backend gemini - $PROJECT_DIR <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/analyzer.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/analyzer.md
 
 <TASK>
 深度分析: {{问题或场景}}

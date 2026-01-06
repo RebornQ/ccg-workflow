@@ -390,7 +390,7 @@ if [ "$TASK_TYPE" == "frontend" ] || [ "$TASK_TYPE" == "fullstack" ]; then
 
   # 调用 codeagent-wrapper
   codeagent-wrapper --backend gemini - "$PROJECT_DIR" <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/gemini/frontend.md
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/frontend.md
 
 <PROJECT_CONTEXT>
 {{从 .claude/repo-context.md 提取的前端技术栈}}
@@ -435,7 +435,7 @@ if [ "$TASK_TYPE" == "backend" ] || [ "$TASK_TYPE" == "fullstack" ]; then
 
   # 调用 codeagent-wrapper
   codeagent-wrapper --backend codex - "$PROJECT_DIR" <<'EOF'
-ROLE_FILE: ~/.claude/prompts/ccg/codex/architect.md
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
 
 <PROJECT_CONTEXT>
 {{从 .claude/repo-context.md 提取的后端技术栈}}

@@ -74,18 +74,27 @@ EOF
 
 **调用示例**：
 
-```bash
-~/.claude/bin/codeagent-wrapper --backend gemini - "$PWD" <<'EOF'
-你是前端分析专家，擅长 UI/UX、组件设计、响应式布局。
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper --backend gemini - \"$PWD\" <<'EOF_GEMINI'
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/analyzer.md
 
-任务：分析以下前端需求，提供设计方案
+<TASK>
+分析以下前端需求，提供设计方案：
 - 组件结构与状态管理
 - 响应式策略
 - 可访问性考虑
 - 性能优化建议
 
 需求：[具体任务描述]
-EOF
+</TASK>
+
+OUTPUT: UI可行性、推荐方案、用户体验
+EOF_GEMINI",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Gemini 前端分析"
+})
 ```
 
 **⚠️ 等待 Gemini 返回后继续**
@@ -96,7 +105,25 @@ EOF
 
 `[模式：计划]` - Gemini 主导规划
 
-调用 Gemini（`architect.md`）→ 组件结构、UI流程、样式方案
+**调用示例**：
+
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper --backend gemini - \"$PWD\" <<'EOF_GEMINI'
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/architect.md
+
+<TASK>
+规划需求: [具体任务描述]
+Context: [项目上下文]
+</TASK>
+
+OUTPUT: 组件结构、UI流程、样式方案
+EOF_GEMINI",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Gemini 前端架构规划"
+})
+```
 
 **⚠️ 等待 Gemini 返回后继续**
 
@@ -114,7 +141,25 @@ Claude 综合规划，请求用户批准后存入 `.claude/plan/任务名.md`
 
 `[模式：优化]` - Gemini 主导审查
 
-调用 Gemini（`reviewer.md`）→ 可访问性、响应式、性能、设计一致性
+**调用示例**：
+
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper --backend gemini - \"$PWD\" <<'EOF_GEMINI'
+ROLE_FILE: ~/.claude/.ccg/prompts/gemini/reviewer.md
+
+<TASK>
+审查代码: [实施的代码变更]
+关注点: 可访问性、响应式、性能、设计一致性
+</TASK>
+
+OUTPUT: 审查意见
+EOF_GEMINI",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Gemini 前端代码审查"
+})
+```
 
 **⚠️ 等待 Gemini 返回后继续**
 

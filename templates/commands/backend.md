@@ -74,18 +74,27 @@ EOF
 
 **调用示例**：
 
-```bash
-~/.claude/bin/codeagent-wrapper --backend codex - "$PWD" <<'EOF'
-你是后端分析专家，擅长 API 设计、算法、数据库优化。
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper --backend codex - \"$PWD\" <<'EOF_CODEX'
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/analyzer.md
 
-任务：分析以下后端需求，提供设计方案
+<TASK>
+分析以下后端需求，提供设计方案：
 - API 接口设计
 - 数据模型结构
 - 性能与安全考虑
 - 错误处理策略
 
 需求：[具体任务描述]
-EOF
+</TASK>
+
+OUTPUT: 技术可行性、推荐方案、风险点
+EOF_CODEX",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Codex 后端分析"
+})
 ```
 
 **⚠️ 等待 Codex 返回后继续**
@@ -96,7 +105,25 @@ EOF
 
 `[模式：计划]` - Codex 主导规划
 
-调用 Codex（`architect.md`）→ 文件结构、函数/类设计、依赖
+**调用示例**：
+
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper --backend codex - \"$PWD\" <<'EOF_CODEX'
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/architect.md
+
+<TASK>
+规划需求: [具体任务描述]
+Context: [项目上下文]
+</TASK>
+
+OUTPUT: 文件结构、函数/类设计、依赖
+EOF_CODEX",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Codex 后端架构规划"
+})
+```
 
 **⚠️ 等待 Codex 返回后继续**
 
@@ -114,7 +141,25 @@ Claude 综合规划，请求用户批准后存入 `.claude/plan/任务名.md`
 
 `[模式：优化]` - Codex 主导审查
 
-调用 Codex（`reviewer.md`）→ 安全性、性能、错误处理、API规范
+**调用示例**：
+
+```
+Bash({
+  command: "~/.claude/bin/codeagent-wrapper --backend codex - \"$PWD\" <<'EOF_CODEX'
+ROLE_FILE: ~/.claude/.ccg/prompts/codex/reviewer.md
+
+<TASK>
+审查代码: [实施的代码变更]
+关注点: 安全性、性能、错误处理、API规范
+</TASK>
+
+OUTPUT: 审查意见
+EOF_CODEX",
+  run_in_background: false,
+  timeout: 3600000,
+  description: "Codex 后端代码审查"
+})
+```
 
 **⚠️ 等待 Codex 返回后继续**
 

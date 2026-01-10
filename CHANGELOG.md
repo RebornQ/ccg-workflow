@@ -7,6 +7,85 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.7.15] - 2026-01-10
+
+### 🐛 Bug 修复
+
+**修复 Windows 系统下的路径兼容性和输出截断问题**
+
+#### 问题背景
+
+Windows 用户在使用 CCG 工作流时遇到两个关键问题：
+
+1. **路径问题**：后台命令执行失败（exit code 127）
+   - 原因：Windows 路径中的反斜杠 `\` 在 Git Bash heredoc 中被转义
+   - 错误：`C:\Users\Lin\.claude\bin\codeagent-wrapper` → `C:UsersLin.claudebincodeagent-wrapper`
+
+2. **输出截断问题**：codeagent-wrapper 不返回完整结果
+   - 原因 1：日志行长度限制（1000 字符）截断长 JSON 事件
+   - 原因 2：Windows Git Bash 后台进程 stdout 缓冲未刷新
+   - 影响：只能获取推理过程，获取不到完整的 agent_message
+
+#### 核心修复
+
+**1. 路径兼容性修复（所有平台受益）**
+- ✅ 统一使用正斜杠路径（`C:/Users/...`）
+  - Windows Git Bash、PowerShell、CMD 均支持正斜杠
+  - heredoc 中不会被转义
+- ✅ Windows 下自动添加 `.exe` 扩展名
+  - `~/.claude/bin/codeagent-wrapper` → `C:/Users/.../bin/codeagent-wrapper.exe`
+- 📝 修改文件：`src/utils/installer.ts`
+
+**2. 输出截断修复**
+- ✅ 移除日志行长度限制（所有平台）
+  - `codexLogLineLimit: 1000 → 0`（无限制）
+  - 防止长 JSON 事件（如 agent_message）被截断
+- ✅ 强制刷新 stdout（仅 Windows）
+  - 添加 `os.Stdout.Sync()` 确保后台进程输出完整捕获
+- 📝 修改文件：`codeagent-wrapper/main.go`（升级至 v5.4.1）
+- 🔨 重新编译所有平台二进制文件
+
+#### 技术细节
+
+**installer.ts 路径处理逻辑**：
+```typescript
+// 1. 正斜杠路径（所有平台）
+const normalizePath = (path: string) => path.replace(/\\/g, '/')
+
+// 2. Windows 特殊处理 .exe 扩展名
+const wrapperName = isWindows() ? 'codeagent-wrapper.exe' : 'codeagent-wrapper'
+const wrapperPath = `${normalizePath(binDir)}/${wrapperName}`
+```
+
+**codeagent-wrapper 修复**：
+```go
+// 1. 无限制日志（所有平台）
+const codexLogLineLimit = 0 // was 1000
+
+// 2. 强制刷新（仅 Windows）
+if isWindows() {
+    _ = os.Stdout.Sync()
+}
+```
+
+#### 用户体验改进
+
+**修复前（Windows）**：
+```
+❌ 路径：C:UsersLin.claudebincodeagent-wrapper (错误)
+❌ 输出：只获取到约 600 字符（12,917 字符被截断）
+❌ 状态：后台命令 exit code 127
+```
+
+**修复后（Windows）**：
+```
+✅ 路径：C:/Users/Lin/.claude/bin/codeagent-wrapper.exe
+✅ 输出：完整的 agent_message（无截断）
+✅ 状态：命令正常执行
+```
+
+---
+
 ## [1.7.13] - 2026-01-09
 
 ### 🐛 Bug 修复

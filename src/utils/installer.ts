@@ -325,8 +325,9 @@ function convertToGitBashPath(windowsPath: string): string {
  * Replace ~ paths in template content with absolute paths
  * This fixes Windows multi-user path resolution issues
  *
- * IMPORTANT: On Windows, we use native paths (C:\Users\...) for PowerShell compatibility.
- * Git Bash style paths (/c/Users/...) fail in PowerShell with "path not found" errors.
+ * IMPORTANT: Always use forward slashes (/) for cross-platform compatibility.
+ * Windows Git Bash requires forward slashes in heredoc (backslashes get escaped).
+ * PowerShell and CMD also support forward slashes for most commands.
  */
 function replaceHomePathsInTemplate(content: string, installDir: string): string {
   // Get absolute paths for replacement
@@ -335,43 +336,31 @@ function replaceHomePathsInTemplate(content: string, installDir: string): string
   const binDir = join(installDir, 'bin')
   const claudeDir = installDir // ~/.claude
 
+  // IMPORTANT: Always use forward slashes for cross-platform compatibility
+  // Git Bash on Windows requires forward slashes in heredoc (backslashes get escaped)
+  // PowerShell and CMD also support forward slashes for most commands
+  const normalizePath = (path: string) => path.replace(/\\/g, '/')
+
   let processed = content
 
-  if (isWindows()) {
-    // Windows: Use native backslash paths for PowerShell/CMD compatibility
-    // Order matters: replace longer patterns first to avoid partial matches
+  // Order matters: replace longer patterns first to avoid partial matches
+  // 1. Replace ~/.claude/.ccg with absolute path (longest match first)
+  processed = processed.replace(/~\/\.claude\/\.ccg/g, normalizePath(ccgDir))
 
-    // 1. Replace ~/.claude/.ccg with absolute path (longest match first)
-    const ccgDirWin = ccgDir.replace(/\//g, '\\')
-    processed = processed.replace(/~\/\.claude\/\.ccg/g, ccgDirWin)
+  // 2. Replace ~/.claude/bin/codeagent-wrapper with absolute path + .exe on Windows
+  //    CRITICAL: Windows Git Bash requires explicit .exe extension
+  const wrapperName = isWindows() ? 'codeagent-wrapper.exe' : 'codeagent-wrapper'
+  const wrapperPath = `${normalizePath(binDir)}/${wrapperName}`
+  processed = processed.replace(/~\/\.claude\/bin\/codeagent-wrapper/g, wrapperPath)
 
-    // 2. Replace ~/.claude/bin with absolute path
-    const binDirWin = binDir.replace(/\//g, '\\')
-    processed = processed.replace(/~\/\.claude\/bin/g, binDirWin)
+  // 3. Replace ~/.claude/bin with absolute path (for other binaries)
+  processed = processed.replace(/~\/\.claude\/bin/g, normalizePath(binDir))
 
-    // 3. Replace ~/.claude with absolute path
-    const claudeDirWin = claudeDir.replace(/\//g, '\\')
-    processed = processed.replace(/~\/\.claude/g, claudeDirWin)
+  // 4. Replace ~/.claude with absolute path
+  processed = processed.replace(/~\/\.claude/g, normalizePath(claudeDir))
 
-    // 4. Replace remaining ~/ patterns with user home
-    const userHomeWin = userHome.replace(/\//g, '\\')
-    processed = processed.replace(/~\//g, `${userHomeWin}\\`)
-
-    // 5. Fix any mixed separators that might result from template structure
-    // Only fix paths that start with a drive letter (C:, D:, etc.)
-    // This regex matches Windows paths and normalizes their separators
-    processed = processed.replace(/([A-Z]):([\\/][^\s"'<>|*?\n]+)/gi, (match, drive, rest) => {
-      // Normalize all separators to backslashes for Windows paths
-      return `${drive}:${rest.replace(/\//g, '\\')}`
-    })
-  }
-  else {
-    // Unix/Mac: Keep forward slash paths
-    processed = processed.replace(/~\/\.claude\/\.ccg/g, ccgDir)
-    processed = processed.replace(/~\/\.claude\/bin/g, binDir)
-    processed = processed.replace(/~\/\.claude/g, claudeDir)
-    processed = processed.replace(/~\//g, `${userHome}/`)
-  }
+  // 5. Replace remaining ~/ patterns with user home
+  processed = processed.replace(/~\//g, `${normalizePath(userHome)}/`)
 
   return processed
 }

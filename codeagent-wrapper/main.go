@@ -14,11 +14,11 @@ import (
 )
 
 const (
-	version               = "5.4.0"
+	version               = "5.4.1"
 	defaultWorkdir        = "."
 	defaultTimeout        = 7200 // seconds (2 hours)
 	defaultCoverageTarget = 90.0
-	codexLogLineLimit     = 1000
+	codexLogLineLimit     = 0 // 0 = unlimited (prevent truncation of long JSON events like agent_message)
 	stdinSpecialChars     = "\n\\\"'`$"
 	stderrCaptureLimit    = 4 * 1024
 	defaultBackendName    = "codex"
@@ -61,6 +61,10 @@ var globalWebServer *WebServer
 
 func init() {
 	forceKillDelay.Store(5) // seconds - default value
+}
+
+func isWindows() bool {
+	return os.Getenv("OS") == "Windows_NT" || len(os.Getenv("WINDIR")) > 0
 }
 
 func runStartupCleanup() {
@@ -440,6 +444,12 @@ func run() (exitCode int) {
 	fmt.Println(result.Message)
 	if result.SessionID != "" {
 		fmt.Printf("\n---\nSESSION_ID: %s\n", result.SessionID)
+	}
+
+	// CRITICAL: Windows-specific fix for Git Bash background process output capture
+	// Git Bash may buffer stdout when running in background mode, causing incomplete output
+	if isWindows() {
+		_ = os.Stdout.Sync()
 	}
 
 	return 0

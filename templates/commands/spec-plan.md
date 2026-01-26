@@ -12,13 +12,13 @@ description: '多模型分析 → 消除歧义 → 零决策可执行计划'
 - Do not proceed to implementation until every ambiguity is resolved.
 - Multi-model collaboration is **mandatory**: use both Codex and Gemini.
 - If constraints cannot be fully specified, escalate to user or return to research phase.
-- Refer to `openspec/AGENTS.md` for conventions; run `openspec update` if missing.
+- Refer to `openspec/config.yaml` for project conventions.
 
 **Steps**
-1. **Select Proposal**
+1. **Select Change**
    - Run `openspec list` to display Active Changes.
-   - Confirm with user which proposal ID to refine.
-   - Run `openspec show <proposal_id>` to review current state.
+   - Confirm with user which change ID to refine.
+   - Run `openspec status --change <change_id>` to review current state.
 
 2. **Multi-Model Implementation Analysis (PARALLEL)**
    - **CRITICAL**: You MUST launch BOTH Codex AND Gemini in a SINGLE message with TWO Bash tool calls.
@@ -29,7 +29,7 @@ description: '多模型分析 → 消除歧义 → 零决策可执行计划'
    **FIRST Bash call (Codex)**:
    ```
    Bash({
-     command: "~/.claude/bin/codeagent-wrapper --backend codex - \"$PWD\" <<'EOF'\nAnalyze proposal <proposal_id> from backend perspective:\n- Implementation approach\n- Technical risks\n- Alternative architectures\n- Edge cases and failure modes\nOUTPUT: JSON with analysis\nEOF",
+     command: "~/.claude/bin/codeagent-wrapper --backend codex - \"$PWD\" <<'EOF'\nAnalyze change <change_id> from backend perspective:\n- Implementation approach\n- Technical risks\n- Alternative architectures\n- Edge cases and failure modes\nOUTPUT: JSON with analysis\nEOF",
      run_in_background: true,
      timeout: 300000,
      description: "Codex: backend analysis"
@@ -39,7 +39,7 @@ description: '多模型分析 → 消除歧义 → 零决策可执行计划'
    **SECOND Bash call (Gemini) - IN THE SAME MESSAGE**:
    ```
    Bash({
-     command: "~/.claude/bin/codeagent-wrapper --backend gemini - \"$PWD\" <<'EOF'\nAnalyze proposal <proposal_id> from frontend/integration perspective:\n- Maintainability assessment\n- Scalability considerations\n- Integration conflicts\nOUTPUT: JSON with analysis\nEOF",
+     command: "~/.claude/bin/codeagent-wrapper --backend gemini - \"$PWD\" <<'EOF'\nAnalyze change <change_id> from frontend/integration perspective:\n- Maintainability assessment\n- Scalability considerations\n- Integration conflicts\nOUTPUT: JSON with analysis\nEOF",
      run_in_background: true,
      timeout: 300000,
      description: "Gemini: frontend analysis"
@@ -82,28 +82,28 @@ description: '多模型分析 → 消除歧义 → 零决策可执行计划'
    - **Monotonicity**: Ordering guarantees (e.g., timestamps increase)
    - **Bounds**: Value ranges, size limits, rate constraints
 
-5. **Update OpenSpec Documents**
-   - Run `/openspec:proposal <proposal_id>` to update specs with:
-     * All resolved constraints
-     * PBT properties in spec format
-     * Zero-decision task sequence
-   - Run `openspec validate <proposal_id>` to verify format.
+5. **Update OPSX Artifacts**
+   - The agent will use OpenSpec skills to generate/update:
+     * specs (Requirements + PBT)
+     * design (Technical decisions)
+     * tasks (Zero-decision implementation plan)
+   - Ensure all resolved constraints and PBT properties are included in the generated artifacts.
 
 6. **Context Checkpoint**
    - Report current context usage.
-   - If approaching 80K tokens, suggest: "Run `/clear` and continue with `/ccg:spec:impl`"
+   - If approaching 80K tokens, suggest: "Run `/clear` and continue with `/ccg:spec-impl`"
 
 **Exit Criteria**
-A proposal is ready for implementation only when:
+A change is ready for implementation only when:
 - [ ] All multi-model analyses completed and synthesized
 - [ ] Zero ambiguities remain (verified by step 3 audit)
 - [ ] All PBT properties documented with falsification strategies
-- [ ] `openspec validate <id>` returns zero issues
+- [ ] Artifacts (specs, design, tasks) generated via OpenSpec skills
 - [ ] User has explicitly approved all constraint decisions
 
 **Reference**
-- Inspect proposal: `openspec show <id> --json`
-- Check conflicts: `openspec list --specs`
+- Inspect change: `openspec status --change <id> --verbose`
+- Check conflicts: `openspec workflow schemas`
 - Search patterns: `rg -n "INVARIANT:|PROPERTY:" openspec/`
 - Use `AskUserQuestion` for ANY ambiguity—never assume
 <!-- CCG:SPEC:PLAN:END -->

@@ -12,16 +12,17 @@ description: '按规范执行 + 多模型协作 + 归档'
 - **NEVER** apply Codex/Gemini prototypes directly—all outputs are reference only.
 - **MANDATORY**: Request `unified diff patch` format from external models; they have zero write permission.
 - Keep implementation strictly within `tasks.md` scope—no scope creep.
-- Refer to `openspec/AGENTS.md` for conventions.
+- Refer to `openspec/config.yaml` for conventions.
 
 **Steps**
-1. **Select Proposal**
+1. **Select Change**
    - Run `openspec list` to inspect Active Changes.
-   - Confirm with user which proposal ID to implement.
-   - Run `openspec show <proposal_id>` to review tasks.
+   - Confirm with user which change ID to implement.
+   - Run `openspec show <change_id>` to review tasks.
 
-2. **Apply OpenSpec Change**
-   - Run `/openspec:apply <proposal_id>` to enter implementation mode.
+2. **Apply OPSX Change**
+   - Use `/ccg:spec-impl` (which uses OpenSpec skills internally) to enter implementation mode.
+   - This skill will guide you through the tasks defined in `tasks.md`.
 
 3. **Identify Minimal Verifiable Phase**
    - Review `tasks.md` and identify the **smallest verifiable phase**.
@@ -104,7 +105,7 @@ description: '按规范执行 + 多模型协作 + 归档'
 
 10. **Archive on Completion**
     - When ALL tasks in `tasks.md` are marked `[x]`:
-    - Run `/openspec:archive <proposal_id>`
+    - The agent will use OpenSpec skills to archive the change.
     - This merges spec deltas to `openspec/specs/` and moves change to archive.
 
 **Reference**
@@ -118,6 +119,5 @@ Implementation is complete when:
 - [ ] All tasks in `tasks.md` marked `[x]`
 - [ ] All multi-model reviews passed
 - [ ] Side-effect review confirmed no regressions
-- [ ] `openspec validate <id>` returns zero issues
 - [ ] Change archived successfully
 <!-- CCG:SPEC:IMPL:END -->

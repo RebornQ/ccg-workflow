@@ -1,9 +1,9 @@
 ---
-description: '初始化 OpenSpec 环境 + 验证多模型 MCP 工具'
+description: '初始化 OpenSpec (OPSX) 环境 + 验证多模型 MCP 工具'
 ---
 <!-- CCG:SPEC:INIT:START -->
 **Core Philosophy**
-- OpenSpec provides the specification framework; CCG adds multi-model collaboration.
+- OPSX provides the specification framework; CCG adds multi-model collaboration.
 - This phase ensures all tools are ready before any development work begins.
 - Fail fast: detect missing dependencies early rather than mid-workflow.
 
@@ -20,18 +20,24 @@ description: '初始化 OpenSpec 环境 + 验证多模型 MCP 工具'
 
 2. **Check and Install OpenSpec**
    - Verify if `openspec` CLI is installed: `openspec --version`
-   - If not installed:
+   - If not installed or not found:
      ```bash
      npm install -g @fission-ai/openspec@latest
      ```
-   - Confirm installation success.
+   - **Path Verification**:
+     - If `openspec` command is not found after installation:
+       1. Find npm global bin: `npm bin -g`
+       2. Add to PATH temporarily for this session: `export PATH=$PATH:$(npm bin -g)`
+       3. **CRITICAL**: Instruct user to add this path to their shell profile (e.g., `~/.zshrc`, `~/.bashrc`, or Windows Environment Variables) to make it permanent.
+   - Confirm installation success by running `openspec --version` again.
 
-3. **Initialize OpenSpec for Current Project**
+3. **Initialize OpenSpec (OPSX) for Current Project**
    - Run:
      ```bash
      openspec init --tools claude
      ```
    - Verify `openspec/` directory structure is created.
+   - Verify `.claude/skills/` contains `openspec-*` skills.
    - Report any errors with remediation steps.
 
 4. **Validate Multi-Model MCP Tools**
@@ -47,8 +53,13 @@ description: '初始化 OpenSpec 环境 + 验证多模型 MCP 工具'
    - For each unavailable tool, display warning with installation instructions.
 
 5. **Validate Context Retrieval MCP** (Optional)
-   - Check if `mcp__ace-tool__search_context` is available.
-   - If not, suggest: "Run `npx ccg-workflow` and select ace-tool MCP option."
+   - **Check Active Tool**: Is `mcp__ace-tool__search_context` available in the current session?
+   - **Check Configuration**: If tool is missing, check `~/.claude.json` (or `%APPDATA%\Claude\claude.json` on Windows) for `"ace-tool"` or `"ace-tool-rs"` in `mcpServers`.
+   - **Diagnosis**:
+     - If tool available: Mark as "✓ Active".
+     - If config exists but tool missing: Mark as "⚠️ Configured but inactive (Try restarting Claude)".
+     - If neither: Mark as "○ Not installed (Optional)".
+   - If not installed/configured, suggest: "Run `npx ccg-workflow` and select ace-tool MCP option."
 
 6. **Summary Report**
    Display status table:
@@ -57,12 +68,20 @@ description: '初始化 OpenSpec 环境 + 验证多模型 MCP 工具'
    ─────────────────────────────────
    OpenSpec CLI              ✓/✗
    Project initialized       ✓/✗
+   OPSX Skills               ✓/✗
    codeagent-wrapper         ✓/✗
    Codex backend             ✓/✗
    Gemini backend            ✓/✗
    ace-tool MCP              ✓/✗ (optional)
    ```
-   If any required components missing, list actions before proceeding.
+
+   **Next Steps (Use CCG Encapsulated Commands)**
+   1. Start Research: `/ccg:spec-research "description"`
+   2. Plan & Design: `/ccg:spec-plan`
+   3. Implement: `/ccg:spec-impl` (Includes auto-review & archive)
+
+   **Standalone Tools (Available Anytime)**
+   - Code Review: `/ccg:spec-review` (Independent dual-model review)
 
 **Reference**
 - OpenSpec CLI: `openspec --help`

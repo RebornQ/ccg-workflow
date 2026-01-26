@@ -1,12 +1,12 @@
 ---
-description: '需求 → 约束集（并行探索 + OpenSpec 提案）'
+description: '需求 → 约束集（并行探索 + OPSX 提案）'
 ---
 <!-- CCG:SPEC:RESEARCH:START -->
 **Core Philosophy**
 - Research produces **constraint sets**, not information dumps. Each constraint narrows the solution space.
 - Constraints tell subsequent stages "don't consider this direction," enabling mechanical execution without decisions.
 - Output: 约束集合 + 可验证的成功判据 (constraint sets + verifiable success criteria).
-- Strictly adhere to OpenSpec rules when writing spec-structured documents.
+- Strictly adhere to OPSX rules when writing spec-structured documents.
 
 **Guardrails**
 - **STOP! BEFORE ANY OTHER ACTION**: You MUST call `mcp__ace-tool__enhance_prompt` FIRST. This is NON-NEGOTIABLE.
@@ -30,9 +30,9 @@ description: '需求 → 约束集（并行探索 + OpenSpec 提案）'
    - Wait for enhanced prompt result.
    - Use enhanced prompt for ALL subsequent steps.
 
-1. **Generate OpenSpec Proposal**
-   - Run: `/openspec:proposal $ARGUMENTS`
-   - This scaffolds `openspec/changes/<name>/` with proposal.md, tasks.md, specs/.
+1. **Generate OPSX Change**
+   - The agent will automatically initialize a new change or continue an existing one using OpenSpec skills.
+   - This scaffolds `openspec/changes/<name>/` with proposal.md.
 
 2. **Initial Codebase Assessment**
    - Use `mcp__ace-tool__search_context` to scan codebase.
@@ -78,8 +78,8 @@ description: '需求 → 约束集（并行探索 + OpenSpec 提案）'
      * Suggest defaults when applicable
    - Capture responses as additional constraints.
 
-7. **Finalize OpenSpec Proposal**
-   - Transform constraint sets into OpenSpec format:
+7. **Finalize OPSX Proposal**
+   - Transform constraint sets into OPSX format:
      * **Context**: User need + discovered constraints
      * **Requirements**: Each constraint becomes requirement with scenario
      * **Success Criteria**: Derived from hints and user confirmations
@@ -91,11 +91,10 @@ description: '需求 → 约束集（并行探索 + OpenSpec 提案）'
 
 8. **Context Checkpoint**
    - Report current context usage.
-   - If approaching 80K tokens, suggest: "Run `/clear` and continue with `/ccg:spec:plan`"
+   - If approaching 80K tokens, suggest: "Run `/clear` and continue with `/ccg:spec-plan`"
 
 **Reference**
-- Review constraints: `rg -n "Constraint:|MUST|MUST NOT" openspec/specs`
+- OPSX CLI: `openspec status`, `openspec show`
 - Check prior research: `ls openspec/changes/*/`
-- Use `openspec show <name>` to inspect proposal structure
 - Use `AskUserQuestion` for ANY ambiguity—never assume or guess
 <!-- CCG:SPEC:RESEARCH:END -->

@@ -50,23 +50,27 @@ export async function update(): Promise<void> {
     // hasUpdate: npm registry has newer version
     // needsWorkflowUpdate: local workflows are older than running version
     const effectiveNeedsUpdate = hasUpdate || needsWorkflowUpdate
+    let defaultConfirm = effectiveNeedsUpdate
 
     let message: string
     if (hasUpdate) {
-      message = `确认要更新到 v${latestVersion} 吗？（先下载最新包 → 删除旧工作流 → 安装新工作流）`
+      message = `发现新版本 v${latestVersion} (当前: v${currentVersion})，是否更新？`
+      defaultConfirm = true
     }
     else if (needsWorkflowUpdate) {
       message = `检测到本地工作流版本 (v${localVersion}) 低于当前版本 (v${currentVersion})，是否更新？`
+      defaultConfirm = true
     }
     else {
-      message = '当前已是最新版本。要重新安装吗？（先下载最新包 → 删除旧工作流 → 安装新工作流）'
+      message = `当前已是最新版本 (v${currentVersion})。是否强制重新安装/修复工作流？`
+      defaultConfirm = false
     }
 
     const { confirmUpdate } = await inquirer.prompt([{
       type: 'confirm',
       name: 'confirmUpdate',
       message,
-      default: effectiveNeedsUpdate, // Default to true if needs update
+      default: defaultConfirm,
     }])
 
     if (!confirmUpdate) {

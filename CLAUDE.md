@@ -1,33 +1,19 @@
-<!-- OPENSPEC:START -->
-# OpenSpec Instructions
-
-These instructions are for AI assistants working in this project.
-
-Always open `@/openspec/AGENTS.md` when the request:
-- Mentions planning or proposals (words like proposal, spec, change, plan)
-- Introduces new capabilities, breaking changes, architecture shifts, or big performance/security work
-- Sounds ambiguous and you need the authoritative spec before coding
-
-Use `@/openspec/AGENTS.md` to learn:
-- How to create and apply change proposals
-- Spec format and conventions
-- Project structure and guidelines
-
-Keep this managed block so 'openspec update' can refresh the instructions.
-
-<!-- OPENSPEC:END -->
-
 # skills-v2 (CCG Multi-Model Collaboration System)
 
 > [根目录](../CLAUDE.md) > **skills-v2**
 
-**Last Updated**: 2026-01-25 (v1.7.51)
+**Last Updated**: 2026-01-26 (v1.7.52)
 
 ---
 
 ## 变更记录 (Changelog)
 
 > 完整变更历史请查看 [CHANGELOG.md](./CHANGELOG.md)
+
+### 2026-01-26 (v1.7.52)
+- 🚀 **OpenSpec 升级**：迁移到 OPSX 架构，废弃 `/openspec:xxx`，启用 `/opsx:xxx`
+- 🔄 **命令更新**：更新 `spec-*` 系列命令以支持新的 `/opsx` 命令
+- 🗑️ **清理**：移除过时的 OpenSpec 指导块和旧命令
 
 ### 2026-01-25 (v1.7.51)
 - 🌏 **修复默认语言为英文的问题**：将 CLI 所有命令描述从硬编码英文改为中文
